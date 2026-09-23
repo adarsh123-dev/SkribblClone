@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lobby - SkribblClone</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="center-wrap">
+    <div class="card">
+        <h1>Room Lobby</h1>
+        <p class="subtitle">Share this code with friends</p>
+        <div class="room-code" id="roomCode">------</div>
+
+        <h3>Players</h3>
+        <ul id="playerList" class="player-list"></ul>
+
+        <button id="startBtn" class="primary-btn" style="display:none" onclick="startGame()">
+            Start Game
+        </button>
+        <p id="waitMsg" class="subtitle">Waiting for host to start the game...</p>
+    </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const roomId = params.get('roomId');
+const roomCode = params.get('roomCode');
+const playerId = params.get('playerId');
+const playerName = params.get('playerName');
+
+document.getElementById('roomCode').textContent = roomCode;
+
+let isHost = false;
+
+function poll() {
+    fetch(`GameServlet?roomId=${roomId}&playerId=${playerId}`)
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) return;
+
+            renderPlayers(data.players);
+
+            // First player in the room is the host and can start the game
+            if (data.players.length > 0 && String(data.players[0].id) === String(playerId)) {
+                isHost = true;
+                document.getElementById('startBtn').style.display = 'inline-block';
+                document.getElementById('waitMsg').style.display = 'none';
+            }
+
+            if (data.roomStatus === 'PLAYING' || data.roomStatus === 'ROUND_END') {
+                window.location.href = `game.html?roomId=${roomId}&roomCode=${roomCode}` +
+                    `&playerId=${playerId}&playerName=${encodeURIComponent(playerName)}`;
+            }
+        })
+        .catch(() => {});
+}
+
+function renderPlayers(players) {
+    const ul = document.getElementById('playerList');
+    ul.innerHTML = '';
+    players.forEach(p => {
+        const li = document.createElement('li');
+        li.textContent = p.name + (String(p.id) === String(playerId) ? ' (you)' : '');
+        ul.appendChild(li);
+    });
+}
+
+function startGame() {
+    const params2 = new URLSearchParams();
+    params2.append('action', 'start');
+    params2.append('roomId', roomId);
+    fetch('GameServlet', { method: 'POST', body: params2 });
+}
+
+poll();
+setInterval(poll, 1000);
+</script>
+</body>
+</html>

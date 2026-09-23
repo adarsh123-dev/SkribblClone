@@ -1,0 +1,178 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #6c5ce7, #00b894);
+    min-height: 100vh;
+    color: #2d3436;
+}
+
+/* ---------- index / lobby ---------- */
+.center-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 36px 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+.card h1 { margin: 0 0 4px; }
+.subtitle { color: #636e72; margin-top: 0; }
+
+.tabs { display: flex; margin: 20px 0; border-radius: 8px; overflow: hidden; border: 1px solid #dfe6e9; }
+.tab-btn { flex: 1; padding: 10px; border: none; background: #f1f2f6; cursor: pointer; font-weight: 600; }
+.tab-btn.active { background: #6c5ce7; color: #fff; }
+
+.tab-panel { display: none; flex-direction: column; gap: 10px; }
+.tab-panel.active { display: flex; }
+
+input[type="text"] {
+    padding: 12px;
+    border: 1px solid #dfe6e9;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.primary-btn {
+    background: #6c5ce7;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+}
+.primary-btn:hover { background: #5a4bd1; }
+
+.error { color: #d63031; min-height: 20px; margin-top: 12px; font-size: 14px; }
+
+.room-code {
+    font-size: 32px;
+    letter-spacing: 6px;
+    font-weight: 700;
+    background: #f1f2f6;
+    border-radius: 10px;
+    padding: 14px;
+    margin: 16px 0;
+}
+
+.player-list { list-style: none; padding: 0; text-align: left; }
+.player-list li {
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+/* ---------- game page ---------- */
+.game-wrap {
+    display: grid;
+    grid-template-columns: 220px 1fr 260px;
+    gap: 16px;
+    padding: 16px;
+    height: 100vh;
+}
+
+.sidebar, .chat-panel {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.board {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.word-display { font-size: 22px; font-weight: 700; letter-spacing: 4px; }
+.round-info { color: #636e72; }
+.timer { font-weight: 700; color: #d63031; }
+
+#canvas {
+    border: 2px solid #dfe6e9;
+    border-radius: 8px;
+    background: #fff;
+    cursor: crosshair;
+    max-width: 100%;
+}
+
+.toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 12px;
+}
+.toolbar button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background: #6c5ce7;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.round-end-banner {
+    margin-top: 12px;
+    background: #ffeaa7;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.room-code-small { margin-top: 16px; font-weight: 600; color: #636e72; }
+
+.chat-box {
+    height: calc(100vh - 220px);
+    overflow-y: auto;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.chat-box div { margin-bottom: 6px; }
+.chat-box .correct { color: #00b894; font-weight: 700; }
+
+#chatForm { display: flex; gap: 8px; }
+#chatForm input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #dfe6e9;
+}
+#chatForm button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #6c5ce7;
+    color: #fff;
+    cursor: pointer;
+}

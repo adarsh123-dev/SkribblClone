@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SkribblClone</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="center-wrap">
+    <div class="card">
+        <h1>🎨 SkribblClone</h1>
+        <p class="subtitle">Draw. Guess. Win.</p>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('create')">Create Room</button>
+            <button class="tab-btn" onclick="showTab('join')">Join Room</button>
+        </div>
+
+        <div id="create" class="tab-panel active">
+            <input type="text" id="createName" placeholder="Your name" maxlength="20">
+            <button class="primary-btn" onclick="createRoom()">Create Room</button>
+        </div>
+
+        <div id="join" class="tab-panel">
+            <input type="text" id="joinName" placeholder="Your name" maxlength="20">
+            <input type="text" id="joinCode" placeholder="Room code" maxlength="10" style="text-transform:uppercase">
+            <button class="primary-btn" onclick="joinRoom()">Join Room</button>
+        </div>
+
+        <p id="errorMsg" class="error"></p>
+    </div>
+</div>
+
+<script>
+function showTab(tab) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    event.target.classList.add('active');
+}
+
+function showError(msg) {
+    document.getElementById('errorMsg').textContent = msg;
+}
+
+function createRoom() {
+    const name = document.getElementById('createName').value.trim();
+    if (!name) { showError('Please enter your name'); return; }
+
+    const params = new URLSearchParams();
+    params.append('playerName', name);
+
+    fetch('CreateRoomServlet', { method: 'POST', body: params })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                goToLobby(data);
+            } else {
+                showError(data.message || 'Could not create room');
+            }
+        })
+        .catch(() => showError('Server error. Is Tomcat/MySQL running?'));
+}
+
+function joinRoom() {
+    const name = document.getElementById('joinName').value.trim();
+    const code = document.getElementById('joinCode').value.trim().toUpperCase();
+    if (!name || !code) { showError('Please enter your name and room code'); return; }
+
+    const params = new URLSearchParams();
+    params.append('playerName', name);
+    params.append('roomCode', code);
+
+    fetch('JoinRoomServlet', { method: 'POST', body: params })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                goToLobby(data);
+            } else {
+                showError(data.message || 'Could not join room');
+            }
+        })
+        .catch(() => showError('Server error. Is Tomcat/MySQL running?'));
+}
+
+function goToLobby(data) {
+    const url = `lobby.html?roomId=${data.roomId}&roomCode=${data.roomCode}` +
+                `&playerId=${data.playerId}&playerName=${encodeURIComponent(data.playerName)}`;
+    window.location.href = url;
+}
+</script>
+</body>
+</html>

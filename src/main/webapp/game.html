@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Game - SkribblClone</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="game-wrap">
+
+    <aside class="sidebar">
+        <h3>Players</h3>
+        <ul id="playerList" class="player-list"></ul>
+        <div class="room-code-small">Room: <span id="roomCodeSmall"></span></div>
+    </aside>
+
+    <main class="board">
+        <div class="top-bar">
+            <div id="wordDisplay" class="word-display">-----</div>
+            <div id="roundInfo" class="round-info">Round 1</div>
+            <div id="timer" class="timer">60s</div>
+        </div>
+
+        <canvas id="canvas" width="700" height="450"></canvas>
+
+        <div id="toolbar" class="toolbar" style="display:none">
+            <input type="color" id="colorPicker" value="#000000">
+            <input type="range" id="sizePicker" min="1" max="20" value="3">
+            <button onclick="clearCanvas()">Clear</button>
+            <button onclick="nextRound()">Next Round ▶</button>
+        </div>
+
+        <div id="roundEndBanner" class="round-end-banner" style="display:none"></div>
+    </main>
+
+    <aside class="chat-panel">
+        <h3>Chat / Guess</h3>
+        <div id="chatBox" class="chat-box"></div>
+        <form id="chatForm" onsubmit="return sendGuess(event)">
+            <input type="text" id="chatInput" placeholder="Type your guess..." autocomplete="off">
+            <button type="submit">Send</button>
+        </form>
+    </aside>
+
+</div>
+
+<script src="js/game.js"></script>
+</body>
+</html>
